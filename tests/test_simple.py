@@ -82,7 +82,7 @@ class TestSimple(TestCase):
         self.assertEqual(None, prefix)
         # todo: check that self.ipdb.lookup_asn('300.3.4.4') raises expcetion
 
-    def test_as_number_convert(self):
+    def test_as_number_convert_success(self):
         """
             Tests for correct conversion between 32-bit and ASDOT number formats for ASNs
         """
@@ -97,6 +97,12 @@ class TestSimple(TestCase):
         self.assertEqual(4294967295, pyasn.convert_asdot_to_32bit_asn("AS65535.65535"))
         self.assertEqual(0, pyasn.convert_asdot_to_32bit_asn("AS0"))
         self.assertEqual(131393, pyasn.convert_asdot_to_32bit_asn("AS2.321"))
+
+    def test_as_number_convert_fail(self):
+        self.assertRaises(ValueError, pyasn.convert_asdot_to_32bit_asn, "AS]2.321")
+        self.assertRaises(ValueError, pyasn.convert_asdot_to_32bit_asn, "AS2..321")
+        self.assertRaises(ValueError, pyasn.convert_asdot_to_32bit_asn, "AS2.")
+        self.assertRaises(ValueError, pyasn.convert_asdot_to_32bit_asn, "AS.098")
 
     def test_get_tud_prefixes(self):
         """
